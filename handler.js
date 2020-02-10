@@ -90,6 +90,7 @@ module.exports.shortbot = async event => {
   const body = JSON.parse(event.body);
   if (body.callback_query) return await action(body.callback_query);
   const { chat, text } = body.message;
+  text = text.toLowerCase();
   console.log("TCL: body.message", body);
   const commandIndex = commands.indexOf(text);
 
@@ -103,9 +104,3 @@ module.exports.shortbot = async event => {
 
   return { statusCode: 200 };
 };
-(async () => {
-  // todoBot.fetchTitle('https://tw.yahoo.com/')
-
-  await todoBot.fetchTitle("https://tw.yahoo.com/");
-  await todoBot.fetchTitle("https://google.com");
-})();
