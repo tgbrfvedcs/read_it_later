@@ -103,3 +103,9 @@ module.exports.shortbot = async event => {
 
   return { statusCode: 200 };
 };
+(async () => {
+  // todoBot.fetchTitle('https://tw.yahoo.com/')
+
+  await todoBot.fetchTitle("https://tw.yahoo.com/");
+  await todoBot.fetchTitle("https://google.com");
+})();

@@ -60,12 +60,14 @@ module.exports = class TodoBot {
     // }
     try {
       const text = await this.fetchTitle(url);
+      if (text === "") throw error;
       const input = {
         url,
         text: text,
         is_read: 0,
         timestamp: Date.now()
       };
+      console.log("TCL: TodoBot -> saveNewLink -> input", input);
       await save(input);
     } catch (error) {
       throw error;
@@ -80,6 +82,7 @@ module.exports = class TodoBot {
       const title = $("head > title")
         .text()
         .trim();
+      console.log("TCL: TodoBot -> fetchTitle -> title", title);
       return title;
     } catch (error) {
       throw error;
