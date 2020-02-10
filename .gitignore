@@ -1,0 +1,12 @@
+# package directories
+node_modules
+jspm_packages
+
+# Serverless directories
+.serverless
+
+index.js
+backup.txt
+test.js
+test2.js
+test3.js
