@@ -1,7 +1,15 @@
 const rp = require("request-promise");
 const cheerio = require("cheerio");
 const axios = require("axios");
-const { save, getList, randomPick, updateToIsRead } = require("./db/db");
+const crypto = require("crypto");
+
+const {
+  save,
+  getList,
+  randomPick,
+  updateToIsReadById,
+  getOneById
+} = require("./db/db");
 module.exports = class TodoBot {
   constructor() {
     // this.prefix = ["http://", "https://"];
@@ -20,7 +28,8 @@ module.exports = class TodoBot {
     return todos
       .sort((a, b) => b.timestamp - a.timestamp)
       .map((e, index) => {
-        e.callback_data = e.url;
+        e.callback_data = e.uuid;
+        console.log("TCL: TodoBot -> addIndices -> e.uuid", e.uuid);
         e.text = `${++index}. ${e.text}`;
         delete e.url;
         return [e];
@@ -43,11 +52,17 @@ module.exports = class TodoBot {
     const queryResult = await getList(showUnread);
     return queryResult.Items;
   }
+  async getOneById(id) {
+    const queryResult = await getOneById(id);
+    console.log("TCL: TodoBot -> getOneById -> id", id);
+    console.log("TCL: TodoBot -> getOneById -> queryResult", queryResult);
+    return queryResult;
+  }
   async randomPick() {
     return await randomPick();
   }
-  async updateToIsRead(url) {
-    return await updateToIsRead(url);
+  async updateToIsReadById(url) {
+    return await updateToIsReadById(url);
   }
   async saveNewLink(url) {
     // if (
@@ -58,10 +73,12 @@ module.exports = class TodoBot {
     // ) {
     //   url = this.prefix[0] + url;
     // }
+    const id = crypto.randomBytes(16).toString("hex");
     try {
       const text = await this.fetchTitle(url);
       if (text === "") throw error;
       const input = {
+        uuid: id,
         url,
         text: text,
         is_read: 0,

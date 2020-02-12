@@ -38,17 +38,27 @@ const getList = async (showUnread = false) => {
   }
   return await docClient.scan(params).promise();
 };
+const getOneById = async id => {
+  const params = {
+    TableName,
+    Key: {
+      uuid: id
+    }
+  };
+
+  return await docClient.get(params).promise();
+};
 
 const randomPick = async () => {
-  const allList = (await getList()).Items;
+  const allList = (await getList(true)).Items;
   const randomNum = Math.round(Math.random() * (allList.length - 1));
   return [allList[randomNum]];
 };
 
-const updateToIsRead = async url => {
+const updateToIsReadById = async id => {
   var params = {
     TableName,
-    Key: { url },
+    Key: { uuid: id },
     UpdateExpression: "set is_read = :bol",
     ExpressionAttributeValues: {
       ":bol": 1
@@ -64,5 +74,12 @@ const updateToIsRead = async url => {
     }
   });
 };
-
-module.exports = { save, getList, randomPick, updateToIsRead };
+// (async () => {
+//   try {
+//     const x = await getOneById("16b480e892cfb04a4d80429eeb9d70e2");
+//     console.log(x);
+//   } catch (error) {
+//     console.lof(error);
+//   }
+// })();
+module.exports = { save, getList, randomPick, updateToIsReadById, getOneById };
