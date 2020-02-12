@@ -29,7 +29,6 @@ module.exports = class TodoBot {
       .sort((a, b) => b.timestamp - a.timestamp)
       .map((e, index) => {
         e.callback_data = e.uuid;
-        console.log("TCL: TodoBot -> addIndices -> e.uuid", e.uuid);
         e.text = `${++index}. ${e.text}`;
         delete e.url;
         return [e];
@@ -54,8 +53,6 @@ module.exports = class TodoBot {
   }
   async getOneById(id) {
     const queryResult = await getOneById(id);
-    console.log("TCL: TodoBot -> getOneById -> id", id);
-    console.log("TCL: TodoBot -> getOneById -> queryResult", queryResult);
     return queryResult;
   }
   async randomPick() {

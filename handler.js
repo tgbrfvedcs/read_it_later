@@ -4,7 +4,6 @@ const commands = ["all", "one", "list", "/start"];
 
 //for Callback query (button clicked)
 const action = async ({ data, message }) => {
-  console.log("TCL: action -> data", data);
   try {
     await todoBot.updateToIsReadById(data);
     const url = (await todoBot.getOneById(data)).Item.url;
@@ -111,11 +110,9 @@ const newUrl = async (url, chat) => {
 
 module.exports.shortbot = async event => {
   const body = JSON.parse(event.body);
-  console.log("TCL: body.callback_query", body.callback_query);
   if (body.callback_query) return await action(body.callback_query);
   const { chat, text } = body.message;
   const lcText = text.toLowerCase();
-  console.log("TCL: body.message", body);
   const commandIndex = commands.indexOf(lcText);
 
   if (commandIndex === -1) {
